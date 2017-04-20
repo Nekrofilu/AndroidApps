@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/filu/MojePliki/AndroidStudioProjects/SimpleWeatherApp/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/home/filu/MojePliki/AndroidStudioProjects/SimpleWeatherApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_9643a00f8b5f5ae9bcb5f1e92ba618d7ba989e77/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/filu/MojePliki/AndroidStudioProjects/SimpleWeatherApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="3877acb366f7c6bd8e0846c9480e0adb28ec8cd4">
+        <dex dex="/home/filu/MojePliki/AndroidStudioProjects/SimpleWeatherApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_9c9074b3aa3df19e7ee9f4bc44f515a521300a57/classes.dex" />
+    </item>
+
+</items>
