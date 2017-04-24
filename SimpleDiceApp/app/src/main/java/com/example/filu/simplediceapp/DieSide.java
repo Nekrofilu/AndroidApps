@@ -5,18 +5,18 @@ package com.example.filu.simplediceapp;
  */
 
 public class DieSide {
-    private String source;
+    private int sourceId;
 
-    DieSide(String source) {
-        this.source = source;
+    DieSide(int sourceId) {
+        this.sourceId = sourceId;
     }
 
-    String getSource() {
-        return source;
+    int getSourceId() {
+        return sourceId;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return getSource().equals(((DieSide) obj).getSource());
+        return sourceId == ((DieSide) obj).getSourceId();
     }
 }

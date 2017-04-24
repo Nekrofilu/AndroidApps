@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Simple Dice App</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_dice_sets">DiceSets</string>
+    <string name="title_activity_dice">Dice</string>
+    <string name="title_activity_die_sides">DieSides</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
