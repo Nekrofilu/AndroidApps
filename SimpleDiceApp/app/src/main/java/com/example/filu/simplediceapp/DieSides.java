@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import static com.example.filu.simplediceapp.DieSidesAdapter.ctx;
+
 
 public class DieSides extends FragmentActivity {
     private static final int DATASET_COUNT = 6;
@@ -33,7 +33,7 @@ public class DieSides extends FragmentActivity {
             public void onClick(View v) {
                 RandomIntGenerator gen = new RandomIntGenerator();
                 ImageView currentRolled = (ImageView) findViewById(R.id.currentDieSide);
-                currentRolled.setImageDrawable(ContextCompat.getDrawable(ctx.getApplicationContext(), mDataset[gen.generate(mDataset.length)].getSourceId()));
+                currentRolled.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), mDataset[gen.generate(mDataset.length)].getSourceId()));
             }
         });
     }

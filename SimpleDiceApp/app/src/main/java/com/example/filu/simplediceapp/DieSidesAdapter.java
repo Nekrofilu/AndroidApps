@@ -14,7 +14,7 @@ import android.widget.ImageView;
 
 public class DieSidesAdapter extends RecyclerView.Adapter<DieSidesAdapter.ViewHolder> {
     DieSide[] mDataset;
-    static Context ctx;
+    Context ctx;
 
 
     public DieSidesAdapter(Context ctx) {
@@ -32,7 +32,7 @@ public class DieSidesAdapter extends RecyclerView.Adapter<DieSidesAdapter.ViewHo
 
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
 
         public ViewHolder(View itemView) {
