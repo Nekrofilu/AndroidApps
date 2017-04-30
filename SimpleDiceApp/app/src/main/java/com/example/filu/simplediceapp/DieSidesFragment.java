@@ -37,7 +37,7 @@ public class DieSidesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_die_sides, container, false);
 
-        recyclerView = (RecyclerView) container.findViewById(R.id.dieSidesRecyclerLayout);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.dieSidesRecyclerLayout);
         mLayoutManager = new GridLayoutManager(getActivity(), columnSpan);
 
         recyclerView.setLayoutManager(mLayoutManager);

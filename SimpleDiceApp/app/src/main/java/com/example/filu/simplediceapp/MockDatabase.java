@@ -1,5 +1,6 @@
 package com.example.filu.simplediceapp;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
@@ -12,14 +13,17 @@ import java.util.List;
 public class MockDatabase {
     List<Drawable> images;
 
-    public MockDatabase() {
+    public MockDatabase(Context ctx) {
         images = new ArrayList<>();
-        images.add(Drawable.createFromPath("/home/filu/Desktop/Repo/SimpleDiceApp/app/src/main/res/drawable/die1.png"));
-        images.add(Drawable.createFromPath("/home/filu/Desktop/Repo/SimpleDiceApp/app/src/main/res/drawable/die2.png"));
-        images.add(Drawable.createFromPath("/home/filu/Desktop/Repo/SimpleDiceApp/app/src/main/res/drawable/die3.png"));
-        images.add(Drawable.createFromPath("/home/filu/Desktop/Repo/SimpleDiceApp/app/src/main/res/drawable/die4.png"));
-        images.add(Drawable.createFromPath("/home/filu/Desktop/Repo/SimpleDiceApp/app/src/main/res/drawable/die5.png"));
-        images.add(Drawable.createFromPath("/home/filu/Desktop/Repo/SimpleDiceApp/app/src/main/res/drawable/die6.png"));
+        Drawable xxx = ctx.getResources().getDrawable(R.drawable.die1);
+
+
+        images.add(ctx.getResources().getDrawable(R.drawable.die1));
+        images.add(ctx.getResources().getDrawable(R.drawable.die2));
+        images.add(ctx.getResources().getDrawable(R.drawable.die3));
+        images.add(ctx.getResources().getDrawable(R.drawable.die4));
+        images.add(ctx.getResources().getDrawable(R.drawable.die5));
+        images.add(ctx.getResources().getDrawable(R.drawable.die6));
     }
 
     List<Drawable> mockQuery() {

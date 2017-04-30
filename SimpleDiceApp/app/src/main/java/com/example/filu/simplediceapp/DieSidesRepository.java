@@ -1,5 +1,6 @@
 package com.example.filu.simplediceapp;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import java.util.List;
@@ -13,8 +14,8 @@ public class DieSidesRepository implements IDieSidesRepository{
 
     private List<Drawable> sides;
 
-    public DieSidesRepository() {
-        MockDatabase db = new MockDatabase();
+    public DieSidesRepository(Context ctx) {
+        MockDatabase db = new MockDatabase(ctx);
         sides = db.mockQuery();
     }
 

@@ -9,8 +9,6 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
  * Created by filu on 24.04.17.
  */
@@ -32,24 +30,18 @@ public class DieSidesAdapter extends RecyclerView.Adapter<DieSidesAdapter.ViewHo
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.row_img)
         ImageView img;
 
         public ViewHolder(View itemView) {
             super(itemView);
-//            img.setImageDrawable(sides.get(0));
-        }
-
-        public ImageView getImageView() {
-            return img;
+            img = (ImageView) itemView.findViewById(R.id.row_img);
+            img.setImageDrawable(sides.get(0));
         }
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.img.setImageDrawable(sides.get(position));
-
     }
 
     @Override

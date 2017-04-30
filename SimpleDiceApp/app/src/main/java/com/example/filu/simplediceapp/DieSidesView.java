@@ -37,7 +37,7 @@ public class DieSidesView extends FragmentActivity implements IDieSidesView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_die_sides);
         ButterKnife.bind(this);
-        repository = new DieSidesRepository();
+        repository = new DieSidesRepository(this);
         presenter = new DieSidesPresenter(this, repository);
 
         presenter.loadDieSides();
