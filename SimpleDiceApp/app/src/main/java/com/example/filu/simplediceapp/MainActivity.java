@@ -6,20 +6,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.kostkaButton)
+    Button kostka;
+
+    @OnClick(R.id.kostkaButton)
+    public void onKostkaClick(View view) {
+        Intent kostkaIntent = new Intent(this, DieSidesView.class);
+        startActivity(kostkaIntent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final Intent kostkaIntent = new Intent(this, DieSides.class);
-        Button kostka = (Button) findViewById(R.id.kostkaButton);
-        kostka.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(kostkaIntent);
-            }
-        });
+        ButterKnife.bind(this);
     }
 }

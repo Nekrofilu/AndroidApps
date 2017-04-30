@@ -1,26 +1,25 @@
 package com.example.filu.simplediceapp;
 
-import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.List;
+
+import butterknife.BindView;
+
 /**
  * Created by filu on 24.04.17.
  */
 
 public class DieSidesAdapter extends RecyclerView.Adapter<DieSidesAdapter.ViewHolder> {
-    DieSide[] mDataset;
-    Context ctx;
+    List<Drawable> sides;
 
-
-    public DieSidesAdapter(Context ctx) {
-        this.mDataset = DieSides.mDataset;
-        this.ctx = ctx;
-
+    public DieSidesAdapter(List<Drawable> sides) {
+        this.sides = sides;
     }
 
     @Override
@@ -33,28 +32,29 @@ public class DieSidesAdapter extends RecyclerView.Adapter<DieSidesAdapter.ViewHo
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
+
+        @BindView(R.id.row_img)
+        ImageView img;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.row_img);
-            imageView.setImageDrawable(ContextCompat.getDrawable(ctx.getApplicationContext(),R.drawable.die1));
+//            img.setImageDrawable(sides.get(0));
         }
 
         public ImageView getImageView() {
-            return imageView;
+            return img;
         }
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(ctx.getApplicationContext(), mDataset[position].getSourceId()));
+        viewHolder.img.setImageDrawable(sides.get(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return sides.size();
     }
 
 

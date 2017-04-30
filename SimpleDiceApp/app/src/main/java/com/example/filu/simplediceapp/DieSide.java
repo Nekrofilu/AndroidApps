@@ -1,22 +1,15 @@
 package com.example.filu.simplediceapp;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * Created by filu on 20.04.17.
  */
 
 public class DieSide {
-    private int sourceId;
+    Drawable image;
 
-    DieSide(int sourceId) {
-        this.sourceId = sourceId;
-    }
-
-    int getSourceId() {
-        return sourceId;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return sourceId == ((DieSide) obj).getSourceId();
+    DieSide(Drawable img) {
+        this.image = img;
     }
 }

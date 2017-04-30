@@ -1,5 +1,6 @@
 package com.example.filu.simplediceapp;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,15 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 
 public class DieSidesFragment extends Fragment {
-    private static final int SPAN_COUNT = 2;
+    DieSidesAdapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
 
-    protected RecyclerView mRecyclerView;
-    protected DieSidesAdapter mAdapter;
-    protected RecyclerView.LayoutManager mLayoutManager;
-    protected DieSide[] mDataset;
-
+    List<Drawable> images;
+    int columnSpan;
+    RecyclerView recyclerView;
 
     public DieSidesFragment() {
         // Required empty public constructor
@@ -26,7 +28,6 @@ public class DieSidesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataset = DieSides.mDataset;
     }
 
 
@@ -36,17 +37,22 @@ public class DieSidesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_die_sides, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dieSidesRecyclerLayout);
+        recyclerView = (RecyclerView) container.findViewById(R.id.dieSidesRecyclerLayout);
+        mLayoutManager = new GridLayoutManager(getActivity(), columnSpan);
 
-        mLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(0);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.scrollToPosition(0);
 
-
-        mAdapter = new DieSidesAdapter(getContext());
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter = new DieSidesAdapter(images);
+        recyclerView.setAdapter(mAdapter);
         return rootView;
     }
 
 
+    public static DieSidesFragment newInstance(int columnSpan, List<Drawable> dieSides) {
+        DieSidesFragment fragment = new DieSidesFragment();
+        fragment.columnSpan = columnSpan;
+        fragment.images = dieSides;
+        return fragment;
+    }
 }

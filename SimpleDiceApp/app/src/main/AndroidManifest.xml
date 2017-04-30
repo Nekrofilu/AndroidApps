@@ -20,13 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DiceSets"
-            android:label="@string/title_activity_dice_sets" />
-        <activity
-            android:name=".Dice"
-            android:label="@string/title_activity_dice" />
-        <activity
-            android:name=".DieSides"
+            android:name=".DieSidesView"
             android:label="@string/title_activity_die_sides"></activity>
     </application>
 
