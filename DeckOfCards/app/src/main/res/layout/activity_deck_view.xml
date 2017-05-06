@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/deckViewActivityLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="com.example.filu.deckofcards.DeckViewActivity">
+
+    <FrameLayout
+        android:id="@+id/placeholder_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_light">
+
+    </FrameLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/drawMoreCardsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_light">
+
+        <Button
+            android:id="@+id/drawMoreCardsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="11dp"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:text="Draw more cards" />
+
+        <TextView
+            android:id="@+id/cardsInfoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="10dp"
+            android:textAlignment="center"
+            android:layout_below="@id/drawMoreCardsBtn"/>
+    </RelativeLayout>
+</android.widget.LinearLayout>
