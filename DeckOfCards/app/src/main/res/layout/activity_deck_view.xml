@@ -33,7 +33,7 @@
             android:layout_marginTop="11dp"
             android:gravity="center_vertical"
             android:onClick="onClick"
-            android:text="Draw more cards" />
+            android:text="@string/draw_more_cards_btn_text" />
 
         <TextView
             android:id="@+id/cardsInfoText"

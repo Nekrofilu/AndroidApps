@@ -1,52 +1,113 @@
 package com.example.filu.deckofcards;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+
+import static com.example.filu.deckofcards.Card.CardValue.ACE;
 
 /**
  * Created by filu on 02.05.17.
  */
 
 public class Card implements Comparable<Card> {
-    String code;
-    Drawable image;
-    String value;
-    String suit;
+    private String code;
+    private Drawable image;
+    private CardValue value;
+    private String suit;
 
-    public Card() {
+    public Card(Context ctx) {
         code = "";
-        image = null;
-        value = "";
+        image = ContextCompat.getDrawable(ctx, R.drawable.default_card);
+        value = CardValue.NULL;
         suit = "";
     }
 
-    Card setValue(String value) {
-        this.value = value;
+    public String getCode() {
+        return String.copyValueOf(code.toCharArray());
+    }
+
+    public Drawable getImage() {
+        return image;
+    }
+
+    public CardValue getValue() {
+        return value;
+    }
+
+    public String getSuit() {
+        return String.copyValueOf(suit.toCharArray());
+    }
+
+    Card setValue(CardValue value) {
+        if(value != CardValue.NULL) {
+            this.value = value;
+        }
         return this;
     }
 
     Card setCode(String code) {
-        this.code = code;
+        if(code != null) {
+            this.code = code;
+        }
         return this;
     }
     Card setSuit(String suit) {
-        this.suit = suit;
+        if(suit != null) {
+            this.suit = suit;
+        }
         return this;
     }
     Card setImage(Drawable image) {
-        this.image = image;
+        if(image != null) {
+            this.image = image;
+        }
         return this;
     }
 
     @Override
     public int compareTo(@NonNull Card o) {
-        //these ifs are used beacause in some cases you can't just compare the values eg. QUEEN comes after KING and the result would be wrong
-        if(value.equals("KING") || (value.equals("10") && o.value.length()==1) || (o.value.equals("ACE"))) {
-            return 1;
-        }
-        if(o.value.equals("KING") || (o.value.equals("10") && value.length()==1) || (value.equals("ACE"))) {
-            return -1;
-        }
         return value.compareTo(o.value);
+    }
+
+    public static CardValue getEnumCardValueOfString(String value) {
+        switch(value) {
+            case "ACE":
+                return ACE;
+            case "2":
+                return CardValue.TWO;
+            case "3":
+                return CardValue.THREE;
+            case "4":
+                return CardValue.FOUR;
+            case "5":
+                return CardValue.FIVE;
+            case "6":
+                return CardValue.SIX;
+            case "7":
+                return CardValue.SEVEN;
+            case "8":
+                return CardValue.EIGHT;
+            case "9":
+                return CardValue.NINE;
+            case "10":
+                return CardValue.TEN;
+            case "JACK":
+                return CardValue.JACK;
+            case "QUEEN":
+                return CardValue.QUEEN;
+            case "KING":
+                return CardValue.KING;
+            default:
+                return CardValue.NULL;
+        }
+    }
+
+    public enum CardValue {
+        NULL, ACE, TWO, THREE, FOUR,
+        FIVE, SIX, SEVEN, EIGHT,
+        NINE, TEN, JACK, QUEEN,
+        KING
     }
 }

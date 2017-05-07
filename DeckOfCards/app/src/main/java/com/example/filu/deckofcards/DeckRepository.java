@@ -1,5 +1,6 @@
 package com.example.filu.deckofcards;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,7 +27,12 @@ import java.util.List;
 public class DeckRepository implements IDeckRepository{
     IDeckPresenter presenter;
     String deckId = "";
-    boolean deckNeedsReshuffling = false;//need this reference to know where to send the data once the async task is finished
+    boolean deckNeedsReshuffling = false;
+    Context ctx;
+
+    DeckRepository(Context ctx) {
+        this.ctx = ctx;
+    }
 
     private final static String API_URL = "https://deckofcardsapi.com/api/deck/";
 
@@ -41,8 +47,6 @@ public class DeckRepository implements IDeckRepository{
     }
 
     private class DrawCardsTask extends AsyncTask<Integer, Void, List<Card>> {
-
-
         @Override
         protected void onPostExecute(List<Card> cards) {
             super.onPostExecute(cards);
@@ -51,12 +55,12 @@ public class DeckRepository implements IDeckRepository{
 
         @Override
         protected List<Card> doInBackground(Integer... params) {
-            if(deckId.equals("")) { //drawing cards for the first time
+            if(deckId.equals("")) {
                 int numDecks = params[0];
                 String newDeckId = getNewDeckId(numDecks);
                 if(!newDeckId.equals("")) {
                     deckId = newDeckId;
-                } else { //something wen't wrong on the API's side
+                } else {
                     return Collections.EMPTY_LIST;
                 }
             }
@@ -84,7 +88,7 @@ public class DeckRepository implements IDeckRepository{
                 if(deckJSON.getBoolean("success")) {
                     return deckJSON.getString("deck_id");
                 } else {
-                    return ""; //something went wrong with the API
+                    return "";
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -93,10 +97,10 @@ public class DeckRepository implements IDeckRepository{
         }
 
         private List<Card> getCards(String deckId) {
-            if(!deckId.equals("")) { //just in case, dont really need to check it though
+            if(deckId != null && !deckId.equals("")) {
                 String stringGetCardsUrl = API_URL + deckId + "/draw/?count=5";
                 if(deckNeedsReshuffling) {
-                    if(!reshuffleDeck(deckId)) { //something went wrong while reshuffling
+                    if(!reshuffleDeck(deckId)) {
                         return Collections.EMPTY_LIST;
                     }
                     deckNeedsReshuffling = false;
@@ -125,17 +129,18 @@ public class DeckRepository implements IDeckRepository{
                         JSONArray cardsArrayJSON = cardsJson.getJSONArray("cards");
                         for(int i = 0; i < cardsArrayJSON.length(); i++) {
                             JSONObject cardJSON = cardsArrayJSON.getJSONObject(i);
-                            Drawable image = drawableFromUrl(cardJSON.getString("image")); //image field of the JSON holds url of cards image
-                            String value = cardJSON.getString("value"); //eg. KING
-                            String suit = cardJSON.getString("suit"); //eg. CLUBS
-                            String code = cardJSON.getString("code"); //eg. KC
+                            Drawable image = drawableFromUrl(cardJSON.getString("image"));
+                            String value = cardJSON.getString("value");
+                            String suit = cardJSON.getString("suit");
+                            String code = cardJSON.getString("code");
 
-                            Card resultCard = new Card().setValue(value).setCode(code).setSuit(suit).setImage(image);
+                            Card.CardValue cardValue = Card.getEnumCardValueOfString(value);
+                            Card resultCard = new Card(ctx).setValue(cardValue).setCode(code).setSuit(suit).setImage(image);
                             resultCardList.add(resultCard);
                         }
                         return resultCardList;
                     } else {
-                        return Collections.EMPTY_LIST; //something went wrong with the API
+                        return Collections.EMPTY_LIST;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -175,7 +180,6 @@ public class DeckRepository implements IDeckRepository{
 
         private Drawable drawableFromUrl(String url) throws IOException {
             Bitmap x;
-
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.connect();
             InputStream input = connection.getInputStream();

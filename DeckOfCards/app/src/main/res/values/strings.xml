@@ -3,4 +3,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="draw_more_cards_btn_text">Wyciagnij wiecej kart</string>
+    <string name="main_activity_num_decks_question_text">Z ilu talii chcialbys wyciagac karty? </string>
+    <string name="draw_cards_button_text">Wyciagnij karty</string>
+    <string name="no_known_combinations">Brak charakterystycznych kombinacji</string>
+    <string name="twins">blizniaki</string>
+    <string name="figures">figury</string>
+    <string name="stairs">schodki</string>
+    <string name="colors">kolory</string>
 </resources>

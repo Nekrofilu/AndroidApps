@@ -23,8 +23,8 @@ public class DeckViewActivity extends AppCompatActivity implements IDeckView, Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_waiting);
 
-        IDeckRepository repo = new DeckRepository();
-        presenter = new DeckPresenter(this, repo);
+        IDeckRepository repo = new DeckRepository(getApplicationContext());
+        presenter = new DeckPresenter(getApplicationContext(), this, repo);
         numDecks = (int) getIntent().getExtras().get("numDecks");
         presenter.loadCards(numDecks);
     }

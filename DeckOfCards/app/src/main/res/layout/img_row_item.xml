@@ -7,7 +7,7 @@
         android:id="@+id/row_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src = "@drawable/c8"
+        android:src = "@drawable/default_card"
         android:adjustViewBounds="true"
         android:scaleType="fitStart"
         android:padding="5dp"/>

@@ -1,5 +1,6 @@
 package com.example.filu.deckofcards;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
@@ -13,8 +14,10 @@ import java.util.List;
 public class DeckPresenter implements IDeckPresenter {
     IDeckView view;
     IDeckRepository repo;
+    Context ctx;
 
-    DeckPresenter(IDeckView view, IDeckRepository repo) {
+    DeckPresenter(Context ctx, IDeckView view, IDeckRepository repo) {
+        this.ctx = ctx;
         this.view = view;
         this.repo = repo;
         repo.setPresenter(this);
@@ -27,107 +30,60 @@ public class DeckPresenter implements IDeckPresenter {
     }
 
     public void receiveCards(List<Card> cards) {
-        Collections.sort(cards); //cards are comparable
-        extractImagesAndSendToVieW(cards);
+        Collections.sort(cards);
+        extractImagesAndSendToView(cards);
         extractMessageAndSendToView(cards);
     }
 
-    private void extractImagesAndSendToVieW(List<Card> cards) {
+    private void extractImagesAndSendToView(List<Card> cards) {
         List<Drawable> cardImages = new ArrayList<>();
-        for(Card card : cards) {
-            cardImages.add(card.image);
+        for (Card card : cards) {
+            cardImages.add(card.getImage());
         }
         view.showCards(cardImages);
     }
 
     private void extractMessageAndSendToView(List<Card> cards) {
         String message = "";
-        boolean[] kfb = areColorsFiguresTwinsStairs(cards);
 
-        if(kfb[0]) {
-            message += "kolor\n";
+        if (areMinThreeSameColors(cards)) {
+            message += ctx.getResources().getString(R.string.colors) + "\n";
         }
 
-        if(kfb[3]) {
-            message += "schodki\n";
+        if (areMinThreeCardsLongStairs(cards)) {
+            message += ctx.getResources().getString(R.string.stairs) + "\n";
         }
 
-        if(kfb[1]) {
-            message += "figury\n";
+        if (areMinThreeFigures(cards)) {
+            message += ctx.getResources().getString(R.string.figures) + "\n";
         }
 
-        if(kfb[2]) {
-            message += "blizniaki\n";
+        if (areMinThreeSameValues(cards)) {
+            message += ctx.getResources().getString(R.string.twins) + "\n";
         }
 
-        if(message.equals("")) {
-            message = "Brak charakterystycznych ulozen";
+        if (message.equals("")) {
+            message = ctx.getResources().getString(R.string.no_known_combinations);
         }
         view.showMessage(message);
     }
 
-    private boolean[] areColorsFiguresTwinsStairs(List<Card> cards) {
-        /*init with all false
-         index 0 is whether or not there is colors, where colors means at least 3 cards of the same suit
-         index 1 is whether or not there are figures, where figures means at least 3 figures
-         index 2 is whether or not there are twins, where twins means at least 3 cards of the same value
-         index 3 is whether or not there are stairs, where stairs means at least 3 consecutive cards
-         */
-        boolean[] colorsFiguresTwinsStairs = new boolean[4];
-
-        int[] colorsOccurances = new int[4]; //each elem of table is occurances of one color, doesn't matter which in this case
+    private boolean areMinThreeFigures(List<Card> cards) {
         int numFigures = 0;
-        int[] valuesOccurances = new int[13]; //each elem of table is occurances of one value, doesn't matter which in this case
-
-        for(Card card : cards) {
-            switch(card.value) {
-                case "ACE":
-                    valuesOccurances[0] = valuesOccurances[0]+1;
-                    //Ace is a figure
-                    numFigures += 1;
-                    break;
-                case "2":
-                    valuesOccurances[1] = valuesOccurances[1]+1;
-                    break;
-                case "3":
-                    valuesOccurances[2] = valuesOccurances[2]+1;
-                    break;
-                case "4":
-                    valuesOccurances[3] = valuesOccurances[3]+1;
-                    break;
-                case "5":
-                    valuesOccurances[4] = valuesOccurances[4]+1;
-                    break;
-                case "6":
-                    valuesOccurances[5] = valuesOccurances[5]+1;
-                    break;
-                case "7":
-                    valuesOccurances[6] = valuesOccurances[6]+1;
-                    break;
-                case "8":
-                    valuesOccurances[7] = valuesOccurances[7]+1;
-                    break;
-                case "9":
-                    valuesOccurances[8] = valuesOccurances[8]+1;
-                    break;
-                case "10":
-                    valuesOccurances[9] = valuesOccurances[9]+1;
-                    break;
-                case "JACK":
-                    valuesOccurances[10] = valuesOccurances[10]+1;
-                    numFigures += 1;
-                    break;
-                case "QUEEN":
-                    valuesOccurances[11] = valuesOccurances[11]+1;
-                    numFigures += 1;
-                    break;
-                case "KING":
-                    valuesOccurances[12] = valuesOccurances[12]+1;
-                    numFigures += 1;
-                    break;
+        for (Card card : cards) {
+            if (card.getValue().equals("ACE") || card.getValue().equals("JACK") || card.getValue().equals("QUEEN") || card.getValue().equals("KING")) {
+                numFigures += 1;
             }
+        }
+        boolean areMinThreeFigures = (numFigures >= 3);
+        return areMinThreeFigures;
+    }
 
-            switch(card.suit) {
+    private boolean areMinThreeSameColors(List<Card> cards) {
+        boolean areMinThreeSameColors = false;
+        int[] colorsOccurances = new int[4];
+        for (Card card : cards) {
+            switch (card.getSuit()) {
                 case "SPADES":
                     colorsOccurances[0] = colorsOccurances[0] + 1;
                     break;
@@ -141,28 +97,88 @@ public class DeckPresenter implements IDeckPresenter {
                     colorsOccurances[3] = colorsOccurances[3] + 1;
                     break;
             }
-
-            for(int i = 0; i<valuesOccurances.length; i++) {
-                if(i < 4) {
-                    if(colorsOccurances[i] >= 3) {
-                        colorsFiguresTwinsStairs[0] = true;
-                    }
-                }
-                if(valuesOccurances[i] >= 3) {
-                    colorsFiguresTwinsStairs[2] = true;
-                }
-                if(i < valuesOccurances.length-3) {
-                    if(valuesOccurances[i]*valuesOccurances[i+1]*valuesOccurances[i+2] != 0) { // this means that there are at least 3 consecutive cards, none of these 3 occur 0 times
-                        colorsFiguresTwinsStairs[3] = true;
-                    }
-                }
-            }
-
-            if(numFigures >= 3) {
-                colorsFiguresTwinsStairs[1] = true;
+        }
+        for (int i = 0; i < 4 && !areMinThreeSameColors; i++) {
+            if (colorsOccurances[i] >= 3) {
+                areMinThreeSameColors = true;
             }
         }
-        return colorsFiguresTwinsStairs;
+        return areMinThreeSameColors;
     }
 
+    private boolean areMinThreeCardsLongStairs(List<Card> cards) {
+        boolean areMinThreeCardsLongStairs = false;
+        int[] valuesOccurances = countCardValuesOccurances(cards);
+
+        for (int i = 0; i < valuesOccurances.length && !areMinThreeCardsLongStairs; i++) {
+            if (i < valuesOccurances.length - 3) {
+                if (valuesOccurances[i] != 0 && valuesOccurances[i + 1] != 0 && valuesOccurances[i + 2] != 0) {
+                    areMinThreeCardsLongStairs = true;
+                }
+            }
+        }
+        return areMinThreeCardsLongStairs;
+    }
+
+    private boolean areMinThreeSameValues(List<Card> cards) {
+        boolean areMinThreeSameValues = false;
+        int[] valuesOccurances = countCardValuesOccurances(cards);
+
+        for (int i = 0; i < valuesOccurances.length && !areMinThreeSameValues; i++) {
+            if(valuesOccurances[i] >= 3) {
+                areMinThreeSameValues = true;
+            }
+        }
+        return areMinThreeSameValues;
+    }
+
+    private int[] countCardValuesOccurances(List<Card> cards) {
+        int[] valuesOccurances = new int[13];
+        for (Card card : cards) {
+            switch (card.getValue()) {
+                case ACE:
+                    valuesOccurances[0] = valuesOccurances[0] + 1;
+                    break;
+                case TWO:
+                    valuesOccurances[1] = valuesOccurances[1] + 1;
+                    break;
+                case THREE:
+                    valuesOccurances[2] = valuesOccurances[2] + 1;
+                    break;
+                case FOUR:
+                    valuesOccurances[3] = valuesOccurances[3] + 1;
+                    break;
+                case FIVE:
+                    valuesOccurances[4] = valuesOccurances[4] + 1;
+                    break;
+                case SIX:
+                    valuesOccurances[5] = valuesOccurances[5] + 1;
+                    break;
+                case SEVEN:
+                    valuesOccurances[6] = valuesOccurances[6] + 1;
+                    break;
+                case EIGHT:
+                    valuesOccurances[7] = valuesOccurances[7] + 1;
+                    break;
+                case NINE:
+                    valuesOccurances[8] = valuesOccurances[8] + 1;
+                    break;
+                case TEN:
+                    valuesOccurances[9] = valuesOccurances[9] + 1;
+                    break;
+                case JACK:
+                    valuesOccurances[10] = valuesOccurances[10] + 1;
+                    break;
+                case QUEEN:
+                    valuesOccurances[11] = valuesOccurances[11] + 1;
+                    break;
+                case KING:
+                    valuesOccurances[12] = valuesOccurances[12] + 1;
+                    break;
+                case NULL:
+                    break;
+            }
+        }
+        return valuesOccurances;
+    }
 }
