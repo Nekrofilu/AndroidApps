@@ -11,11 +11,11 @@ import android.widget.TextView;
 import java.util.List;
 
 public class DeckViewActivity extends AppCompatActivity implements IDeckView, View.OnClickListener {
-    IDeckPresenter presenter;
-    int numDecks;
+    private IDeckPresenter presenter;
+    private int numDecks;
 
-    List<Drawable> currentCards;
-    String currentMessage;
+    private List<Drawable> currentCards;
+    private String currentMessage;
 
 
     @Override
@@ -23,7 +23,7 @@ public class DeckViewActivity extends AppCompatActivity implements IDeckView, Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_waiting);
 
-        IDeckRepository repo = new DeckRepository(getApplicationContext());
+        IDeckRepository repo = new DeckRepository();
         presenter = new DeckPresenter(getApplicationContext(), this, repo);
         numDecks = (int) getIntent().getExtras().get("numDecks");
         presenter.loadCards(numDecks);

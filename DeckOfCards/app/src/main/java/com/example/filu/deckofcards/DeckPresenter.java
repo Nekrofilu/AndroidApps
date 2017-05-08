@@ -12,9 +12,9 @@ import java.util.List;
  */
 
 public class DeckPresenter implements IDeckPresenter {
-    IDeckView view;
-    IDeckRepository repo;
-    Context ctx;
+    private IDeckView view;
+    private IDeckRepository repo;
+    private Context ctx;
 
     DeckPresenter(Context ctx, IDeckView view, IDeckRepository repo) {
         this.ctx = ctx;

@@ -1,9 +1,7 @@
 package com.example.filu.deckofcards;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 
 import static com.example.filu.deckofcards.Card.CardValue.ACE;
 
@@ -17,9 +15,9 @@ public class Card implements Comparable<Card> {
     private CardValue value;
     private String suit;
 
-    public Card(Context ctx) {
+    public Card(@NonNull Drawable image) {
         code = "";
-        image = ContextCompat.getDrawable(ctx, R.drawable.default_card);
+        this.image = image;
         value = CardValue.NULL;
         suit = "";
     }

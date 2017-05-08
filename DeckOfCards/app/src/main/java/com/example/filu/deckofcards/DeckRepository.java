@@ -1,6 +1,5 @@
 package com.example.filu.deckofcards;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,14 +24,9 @@ import java.util.List;
  */
 
 public class DeckRepository implements IDeckRepository{
-    IDeckPresenter presenter;
-    String deckId = "";
+    private IDeckPresenter presenter;
+    private String deckId = "";
     boolean deckNeedsReshuffling = false;
-    Context ctx;
-
-    DeckRepository(Context ctx) {
-        this.ctx = ctx;
-    }
 
     private final static String API_URL = "https://deckofcardsapi.com/api/deck/";
 
@@ -70,26 +64,13 @@ public class DeckRepository implements IDeckRepository{
         private String getNewDeckId(int numDecks) {
             String stringGetNewDeckURL = API_URL + "new/shuffle/?deck_count=" + Integer.toString(numDecks);
             try {
-                URL getNewDeckURL = new URL(stringGetNewDeckURL);
-                HttpURLConnection getNewDeckURLConnection = (HttpURLConnection) getNewDeckURL.openConnection();
-                InputStream inputStream = getNewDeckURLConnection.getInputStream();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuffer stringResponse = new StringBuffer(1024);
-                String tmp = "";
-                while((tmp= bufferedReader.readLine())!=null) {
-                    stringResponse.append(tmp).append("\n");
+                JSONObject deckJSON = getJSONFromUrl(stringGetNewDeckURL);
+                if(deckJSON != null) {
+                    if(deckJSON.getBoolean("success")) {
+                        return deckJSON.getString("deck_id");
+                    }
                 }
-
-                bufferedReader.close();
-
-                JSONObject deckJSON = new JSONObject(stringResponse.toString());
-                if(deckJSON.getBoolean("success")) {
-                    return deckJSON.getString("deck_id");
-                } else {
-                    return "";
-                }
+                return "";
             } catch (Exception e) {
                 e.printStackTrace();
                 return "";
@@ -106,20 +87,7 @@ public class DeckRepository implements IDeckRepository{
                     deckNeedsReshuffling = false;
                 }
                 try {
-                    URL getCardsUrl = new URL(stringGetCardsUrl);
-                    HttpURLConnection getCardsURLConnection = (HttpURLConnection) getCardsUrl.openConnection();
-                    InputStream inputStream = getCardsURLConnection.getInputStream();
-                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                    StringBuffer stringResponse = new StringBuffer(1024);
-                    String tmp = "";
-                    while ((tmp = bufferedReader.readLine()) != null) {
-                        stringResponse.append(tmp).append("\n");
-                    }
-                    bufferedReader.close();
-
-                    JSONObject cardsJson = new JSONObject(stringResponse.toString());
+                    JSONObject cardsJson = getJSONFromUrl(stringGetCardsUrl);
 
                     if(cardsJson.getBoolean("success")) {
                         if(cardsJson.getInt("remaining") < 5) {
@@ -130,13 +98,15 @@ public class DeckRepository implements IDeckRepository{
                         for(int i = 0; i < cardsArrayJSON.length(); i++) {
                             JSONObject cardJSON = cardsArrayJSON.getJSONObject(i);
                             Drawable image = drawableFromUrl(cardJSON.getString("image"));
-                            String value = cardJSON.getString("value");
-                            String suit = cardJSON.getString("suit");
-                            String code = cardJSON.getString("code");
+                            if(image != null) {
+                                String value = cardJSON.getString("value");
+                                String suit = cardJSON.getString("suit");
+                                String code = cardJSON.getString("code");
 
-                            Card.CardValue cardValue = Card.getEnumCardValueOfString(value);
-                            Card resultCard = new Card(ctx).setValue(cardValue).setCode(code).setSuit(suit).setImage(image);
-                            resultCardList.add(resultCard);
+                                Card.CardValue cardValue = Card.getEnumCardValueOfString(value);
+                                Card resultCard = new Card(image).setValue(cardValue).setCode(code).setSuit(suit);
+                                resultCardList.add(resultCard);
+                            }
                         }
                         return resultCardList;
                     } else {
@@ -153,24 +123,15 @@ public class DeckRepository implements IDeckRepository{
 
         private boolean reshuffleDeck(String deckId) {
             boolean reshuffledSuccessfully = false;
-            String string_reshuffle_deck_url = API_URL + deckId + "/shuffle/";
+            String stringReshuffleDeckUrl = API_URL + deckId + "/shuffle/";
             try {
-                URL reshuffleDeckURL = new URL(string_reshuffle_deck_url);
-                HttpURLConnection reshuffleDeckURLConnection = (HttpURLConnection) reshuffleDeckURL.openConnection();
-                InputStream inputStream = reshuffleDeckURLConnection.getInputStream();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuffer stringResponse = new StringBuffer(1024);
-                String tmp = "";
-                while ((tmp = bufferedReader.readLine()) != null) {
-                    stringResponse.append(tmp).append("\n");
+                JSONObject reshuffledDeckJSON = getJSONFromUrl(stringReshuffleDeckUrl);
+                if(reshuffledDeckJSON != null) {
+                    reshuffledSuccessfully = reshuffledDeckJSON.getBoolean("success");
+                    return reshuffledSuccessfully;
+                } else {
+                    return false;
                 }
-                bufferedReader.close();
-
-                JSONObject reshuffledDeckJSON = new JSONObject(stringResponse.toString());
-                reshuffledSuccessfully = reshuffledDeckJSON.getBoolean("success");
-                return reshuffledSuccessfully;
             } catch (Exception e) {
                 e.printStackTrace();
                 return reshuffledSuccessfully;
@@ -186,6 +147,29 @@ public class DeckRepository implements IDeckRepository{
 
             x = BitmapFactory.decodeStream(input);
             return new BitmapDrawable(x);
+        }
+
+        private JSONObject getJSONFromUrl(String stringUrl) {
+
+            try {
+                URL reshuffleDeckURL = new URL(stringUrl);
+                HttpURLConnection reshuffleDeckURLConnection = (HttpURLConnection) reshuffleDeckURL.openConnection();
+                InputStream inputStream = reshuffleDeckURLConnection.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuffer stringResponse = new StringBuffer(1024);
+                String tmp = "";
+                while ((tmp = bufferedReader.readLine()) != null) {
+                    stringResponse.append(tmp).append("\n");
+                }
+                bufferedReader.close();
+
+                return new JSONObject(stringResponse.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 }
