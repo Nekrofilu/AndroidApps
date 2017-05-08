@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -26,7 +27,7 @@ import java.util.List;
 public class DeckRepository implements IDeckRepository{
     private IDeckPresenter presenter;
     private String deckId = "";
-    boolean deckNeedsReshuffling = false;
+    private boolean deckNeedsReshuffling = false;
 
     private final static String API_URL = "https://deckofcardsapi.com/api/deck/";
 
@@ -65,10 +66,8 @@ public class DeckRepository implements IDeckRepository{
             String stringGetNewDeckURL = API_URL + "new/shuffle/?deck_count=" + Integer.toString(numDecks);
             try {
                 JSONObject deckJSON = getJSONFromUrl(stringGetNewDeckURL);
-                if(deckJSON != null) {
-                    if(deckJSON.getBoolean("success")) {
-                        return deckJSON.getString("deck_id");
-                    }
+                if(deckJSON != null && deckJSON.getBoolean("success")) {
+                    return deckJSON.getString("deck_id");
                 }
                 return "";
             } catch (Exception e) {
@@ -88,8 +87,7 @@ public class DeckRepository implements IDeckRepository{
                 }
                 try {
                     JSONObject cardsJson = getJSONFromUrl(stringGetCardsUrl);
-
-                    if(cardsJson.getBoolean("success")) {
+                    if(cardsJson != null && cardsJson.getBoolean("success")) {
                         if(cardsJson.getInt("remaining") < 5) {
                             deckNeedsReshuffling = true;
                         }
@@ -102,40 +100,34 @@ public class DeckRepository implements IDeckRepository{
                                 String value = cardJSON.getString("value");
                                 String suit = cardJSON.getString("suit");
                                 String code = cardJSON.getString("code");
-
                                 Card.CardValue cardValue = Card.getEnumCardValueOfString(value);
                                 Card resultCard = new Card(image).setValue(cardValue).setCode(code).setSuit(suit);
                                 resultCardList.add(resultCard);
                             }
                         }
                         return resultCardList;
-                    } else {
-                        return Collections.EMPTY_LIST;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     return Collections.EMPTY_LIST;
                 }
-            } else {
-                return Collections.EMPTY_LIST;
             }
+            return Collections.EMPTY_LIST;
         }
 
         private boolean reshuffleDeck(String deckId) {
-            boolean reshuffledSuccessfully = false;
             String stringReshuffleDeckUrl = API_URL + deckId + "/shuffle/";
-            try {
+
                 JSONObject reshuffledDeckJSON = getJSONFromUrl(stringReshuffleDeckUrl);
                 if(reshuffledDeckJSON != null) {
-                    reshuffledSuccessfully = reshuffledDeckJSON.getBoolean("success");
-                    return reshuffledSuccessfully;
-                } else {
-                    return false;
+                    try {
+                        return reshuffledDeckJSON.getBoolean("success");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return reshuffledSuccessfully;
-            }
+            return false;
         }
 
 
