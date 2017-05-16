@@ -1,32 +1,27 @@
 package com.example.filu.deckofcards;
 
-import android.graphics.drawable.Drawable;
+//import static com.example.filu.deckofcards.Card.CardValue.ACE;
+
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import static com.example.filu.deckofcards.Card.CardValue.ACE;
 
-/**
- * Created by filu on 02.05.17.
- */
-
 public class Card implements Comparable<Card> {
+
     private String code;
-    private Drawable image;
-    private CardValue value;
+    private Bitmap image;
     private String suit;
+    private CardValue value;
 
-    public Card(@NonNull Drawable image) {
-        code = "";
-        this.image = image;
-        value = CardValue.NULL;
-        suit = "";
+    Card(String newCode, Bitmap newImage, String newSuit, String newValue) {
+        code = newCode;
+        image = newImage;
+        suit = newSuit;
+        value = getEnumCardValueOfString(newValue);
     }
 
-    public String getCode() {
-        return String.copyValueOf(code.toCharArray());
-    }
-
-    public Drawable getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
@@ -35,34 +30,14 @@ public class Card implements Comparable<Card> {
     }
 
     public String getSuit() {
-        return String.copyValueOf(suit.toCharArray());
+        return suit;
     }
 
-    Card setValue(CardValue value) {
-        if(value != CardValue.NULL) {
-            this.value = value;
-        }
-        return this;
+    public String getCode() {
+        return code;
     }
 
-    Card setCode(String code) {
-        if(code != null) {
-            this.code = code;
-        }
-        return this;
-    }
-    Card setSuit(String suit) {
-        if(suit != null) {
-            this.suit = suit;
-        }
-        return this;
-    }
-    Card setImage(Drawable image) {
-        if(image != null) {
-            this.image = image;
-        }
-        return this;
-    }
+
 
     @Override
     public int compareTo(@NonNull Card o) {

@@ -12,17 +12,17 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-public class DisplayDrawnCardsFragment extends Fragment {
+public class DrawnCardsFragment extends Fragment {
     List<Drawable> images;
     int columnSpan;
 
 
-    public DisplayDrawnCardsFragment() {
+    public DrawnCardsFragment() {
         // Required empty public constructor
     }
 
-    public static DisplayDrawnCardsFragment newInstance(int columnSpan, List<Drawable> images) {
-        DisplayDrawnCardsFragment fragment = new DisplayDrawnCardsFragment();
+    public static DrawnCardsFragment newInstance(int columnSpan, List<Drawable> images) {
+        DrawnCardsFragment fragment = new DrawnCardsFragment();
         //not a good way of passing arguments, gonna change it
         fragment.columnSpan = columnSpan;
         fragment.images = images;
@@ -81,7 +81,7 @@ public class DisplayDrawnCardsFragment extends Fragment {
             public ViewHolder(View itemView) {
                 super(itemView);
                 img = (ImageView) itemView.findViewById(R.id.row_img);
-                img.setImageDrawable(images.get(0)); //doesnt matter but I have give it some image to start with
+                img.setImageDrawable(images.get(0)); //this image is going to be changed on bind, the viewholder just needs something to start with
             }
         }
     }

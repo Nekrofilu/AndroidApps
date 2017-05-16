@@ -4,4 +4,4 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/holo_blue_light"
-    tools:context="com.example.filu.deckofcards.DisplayDrawnCardsFragment"></android.support.v7.widget.RecyclerView>
+    tools:context="com.example.filu.deckofcards.DrawnCardsFragment"></android.support.v7.widget.RecyclerView>

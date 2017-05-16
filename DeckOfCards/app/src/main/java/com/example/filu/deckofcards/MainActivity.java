@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.drawCardsBtn)
     void onLosujClicked(View view) {
-        Intent drawCardsIntent = new Intent(this, DeckViewActivity.class);
+        Intent drawCardsIntent = new Intent(this, DrawnCardsViewActivity.class);
         drawCardsIntent.putExtra("numDecks", numDecksBar.getProgress() + 1);
         startActivity(drawCardsIntent);
     }

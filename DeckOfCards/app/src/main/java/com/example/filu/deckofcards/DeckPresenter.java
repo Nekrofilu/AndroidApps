@@ -1,15 +1,13 @@
 package com.example.filu.deckofcards;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by filu on 02.05.17.
- */
 
 public class DeckPresenter implements IDeckPresenter {
     private IDeckView view;
@@ -38,7 +36,8 @@ public class DeckPresenter implements IDeckPresenter {
     private void extractImagesAndSendToView(List<Card> cards) {
         List<Drawable> cardImages = new ArrayList<>();
         for (Card card : cards) {
-            cardImages.add(card.getImage());
+            Drawable drawable = new BitmapDrawable(ctx.getResources(), card.getImage());
+            cardImages.add(drawable);
         }
         view.showCards(cardImages);
     }

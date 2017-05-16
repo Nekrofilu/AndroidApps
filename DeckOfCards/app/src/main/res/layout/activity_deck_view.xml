@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context="com.example.filu.deckofcards.DeckViewActivity">
+    tools:context="com.example.filu.deckofcards.DrawnCardsViewActivity">
 
     <FrameLayout
         android:id="@+id/placeholder_fragment"

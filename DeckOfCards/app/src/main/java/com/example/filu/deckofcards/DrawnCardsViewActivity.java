@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class DeckViewActivity extends AppCompatActivity implements IDeckView, View.OnClickListener {
+public class DrawnCardsViewActivity extends AppCompatActivity implements IDeckView, View.OnClickListener {
     private IDeckPresenter presenter;
     private int numDecks;
 
@@ -33,12 +33,12 @@ public class DeckViewActivity extends AppCompatActivity implements IDeckView, Vi
     public void showCards(List<Drawable> cards) {
         currentCards = cards;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        DisplayDrawnCardsFragment fragment = null;
+        DrawnCardsFragment fragment = null;
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            fragment = DisplayDrawnCardsFragment.newInstance(5, currentCards);
+            fragment = DrawnCardsFragment.newInstance(5, currentCards);
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            fragment = DisplayDrawnCardsFragment.newInstance(3, currentCards);
+            fragment = DrawnCardsFragment.newInstance(3, currentCards);
         }
         transaction.replace(R.id.placeholder_fragment, fragment);
         transaction.commit();
@@ -66,11 +66,11 @@ public class DeckViewActivity extends AppCompatActivity implements IDeckView, Vi
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        DisplayDrawnCardsFragment fragment = null;
+        DrawnCardsFragment fragment = null;
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            fragment = DisplayDrawnCardsFragment.newInstance(5, currentCards);
+            fragment = DrawnCardsFragment.newInstance(5, currentCards);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            fragment = DisplayDrawnCardsFragment.newInstance(3, currentCards);
+            fragment = DrawnCardsFragment.newInstance(3, currentCards);
         }
         transaction.replace(R.id.placeholder_fragment, fragment);
         transaction.commit();
